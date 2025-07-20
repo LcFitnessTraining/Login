@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dieta Tracker LCFitness</title>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js" defer></script>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+
+  <link rel="stylesheet" href="dieta.css" />
+</head>
+<body>
+  <div id="background"></div>
+
+  <h1 class="title">Food Tracker LcFitnessTraining</h1>
+
+  <div class="search-container">
+    <input type="text" id="food-search" placeholder="Cerca alimento..." />
+    <select id="meal-type">
+      <option value="colazione">🍳 Colazione</option>
+      <option value="pranzo">🍝 Pranzo</option>
+      <option value="cena">🍽️ Cena</option>
+      <option value="spuntini">🥜 Spuntini</option>
+    </select>
+    <button onclick="searchFood()">🔍 Cerca</button>
+  </div>
+
+  <div id="search-results"></div>
+
+  <div class="meals-container">
+    <div class="meal-block" id="colazione-block">
+      <h2>🍳 Colazione</h2>
+      <table class="meal-table" id="colazione-table">
+        <thead>
+          <tr><th>Alimento</th><th>KCal</th><th>Carbo</th><th>Prot</th><th>Grassi</th><th>Q.tà</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="meal-block" id="pranzo-block">
+      <h2>🍝 Pranzo</h2>
+      <table class="meal-table" id="pranzo-table">
+        <thead>
+          <tr><th>Alimento</th><th>KCal</th><th>Carbo</th><th>Prot</th><th>Grassi</th><th>Q.tà</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="meal-block" id="cena-block">
+      <h2>🍽️ Cena</h2>
+      <table class="meal-table" id="cena-table">
+        <thead>
+          <tr><th>Alimento</th><th>KCal</th><th>Carbo</th><th>Prot</th><th>Grassi</th><th>Q.tà</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="meal-block" id="spuntini-block">
+      <h2>🥜 Spuntini</h2>
+      <table class="meal-table" id="spuntini-table">
+        <thead>
+          <tr><th>Alimento</th><th>KCal</th><th>Carbo</th><th>Prot</th><th>Grassi</th><th>Q.tà</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <button onclick="resetDay()">🔄 Reset Giornaliero</button>
+
+
+  <div class="goals">
+  <h3>Obiettivi Giornalieri</h3>
+  <label>Calorie: <input type="number" id="goal-calories" placeholder="es. 2000" /></label>
+  <label>Carboidrati: <input type="number" id="goal-carbs" placeholder="g" /></label>
+  <label>Proteine: <input type="number" id="goal-protein" placeholder="g" /></label>
+  <label>Grassi: <input type="number" id="goal-fat" placeholder="g" /></label>
+  <button onclick="updateGoals()">Salva Obiettivi</button>
+</div>
+
+  <div class="totals">
+    <h3>Totali Giornalieri</h3>
+    <p>Calorie: <span id="total-calories">0</span> kcal</p>
+    <p>Carboidrati: <span id="total-carbs">0</span> g</p>
+    <p>Proteine: <span id="total-protein">0</span> g</p>
+    <p>Grassi: <span id="total-fat">0</span> g</p>
+  </div>
+  <span id="goal-saved-msg" class="fade-msg">Obiettivi salvati ✅</span>
+
+<div class="progress-bars">
+  <h3>Progresso Macronutrienti</h3>
+
+  <div class="progress-item">
+    <label>Carboidrati</label>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="bar-carbs"></div>
+      <span id="warn-carbs" class="warning"></span>
+    </div>
+  </div>
+
+  <div class="progress-item">
+    <label>Proteine</label>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="bar-protein"></div>
+      <span id="warn-protein" class="warning"></span>
+    </div>
+  </div>
+
+  <div class="progress-item">
+    <label>Grassi</label>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="bar-fat"></div>
+      <span id="warn-fat" class="warning"></span>
+    </div>
+  </div>
+</div>
+
+  <script src="dieta.js" defer></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log("Service Worker registrato"))
+      .catch(err => console.error("Errore Service Worker", err));
+  }
+</script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+</script>
+  <div class="container">
+    <h2>Accedi o Registrati</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="login()">Accedi</button>
+    <button onclick="register()">Registrati</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      firebase.auth().signInWithEmailAndPassword(email, pass)
+        .then(() => window.location.href = 'index.html')
+        .catch(err => document.getElementById('message').textContent = err.message);
+    }
+
+    function register() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      firebase.auth().createUserWithEmailAndPassword(email, pass)
+        .then(() => window.location.href = 'index.html')
+        .catch(err => document.getElementById('message').textContent = err.message);
+    }
+  </script>
+</body>
+</html>
