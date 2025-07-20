@@ -6,11 +6,11 @@
   <title>Dieta Tracker LCFitness</title>
     <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
-  <script src="firebase-config.js" defer></script>
+  <script src="dieta.js" defer></script>
   <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#111111">
 
-  <link rel="stylesheet" href="dieta.css" />
+  <link rel="stylesheet" href="login.css" />
 </head>
 <body>
   <script src="dieta.js" defer></script>
@@ -23,11 +23,11 @@
 </script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
-<script src="firebase-config.js"></script>
+<script src="dieta.js"></script>
 <script>
   firebase.auth().onAuthStateChanged(user => {
     if (!user) {
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
   });
 </script>
